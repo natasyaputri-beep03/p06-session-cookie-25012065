@@ -3,6 +3,27 @@
 require __DIR__ . '/bootstrap.php';
 require __DIR__ . '/functions.php';
 require __DIR__ . '/data/products.php';
+if (isset($_POST['theme'])) {
+    $newTheme = $_POST['theme'];
+
+    if (in_array($newTheme, ['light', 'dark'], true)) {
+        setcookie('theme', $newTheme, [
+            'expires' => time() + (30 * 24 * 60 * 60),
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+
+        header('Location: index.php');
+        exit;
+    }
+}
+
+
+$theme = $_COOKIE['theme'] ?? 'light';
+
+if (!in_array($theme, ['light', 'dark'], true)) {
+    $theme = 'light';
+}
 
 $flash = pullFlash();
 $cartCount = cartCount($_SESSION['cart']);
@@ -14,7 +35,11 @@ $cartCount = cartCount($_SESSION['cart']);
     <meta charset="UTF-8">
     <title>Katalog Produk</title>
 </head>
-<body>
+<body style="background: <?= $theme === 'dark' ? '#222' : '#fff' ?>; color: <?= $theme === 'dark' ? '#fff' : '#000' ?>;">
+<form method="post">
+    <button type="submit" name="theme" value="light">Light</button>
+    <button type="submit" name="theme" value="dark">Dark</button>
+</form>
 
 <h1>Katalog Produk</h1>
 
