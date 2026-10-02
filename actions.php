@@ -22,6 +22,12 @@ if (!isset($products[$id])) {
 if ($action === 'add') {
     $_SESSION['cart'][$id] = ($_SESSION['cart'][$id] ?? 0) + 1;
     setFlash('Produk berhasil ditambahkan ke keranjang.');
+} elseif ($action === 'remove') {
+    unset($_SESSION['cart'][$id]);
+    setFlash('Produk dihapus dari keranjang.');
+} elseif ($action === 'clear') {
+    $_SESSION['cart'] = [];
+    setFlash('Keranjang dikosongkan.');
 } else {
     setFlash('Aksi tidak valid.');
 }
