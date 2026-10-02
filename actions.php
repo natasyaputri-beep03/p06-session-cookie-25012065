@@ -11,9 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $action = $_POST['action'] ?? '';
+
+if (!in_array($action, ['add', 'remove', 'clear'], true)) {
+    setFlash('Aksi tidak valid.');
+    header('Location: index.php');
+    exit;
+}
+
 $id = (int) ($_POST['id'] ?? 0);
 
-if (!isset($products[$id])) {
+if ($action !== 'clear' && !isset($products[$id])) {
     setFlash('Produk tidak ditemukan.');
     header('Location: index.php');
     exit;
